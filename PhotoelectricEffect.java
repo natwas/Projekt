@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -43,7 +44,8 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 //import java.util.Random;
-
+import java.util.ResourceBundle;
+import java.sql.*;
 
 
 
@@ -59,12 +61,12 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 
 	JMenuBar menubar;
 	JMenu menu, language, windowpane;
-	JMenuItem menuZapisz, menuNowyplik, Polish, English, creators;
+	JMenuItem menuZapisz, menuNowyplik, Polish, English, Rus, creators;
 	JPanel PUpper, PDown, PLeft, PRight, DrawPanel;
 	JSlider slider;
 	JTextField text1;
 	JRadioButton radio1, radio2;
-	JButton selectmaterial, frequency , changeColor, start, Ebonit, Porcelana, Szklo, Kalafonia;
+	JButton selectMaterial, frequency , changeColor, start, Ebonit, Porcelana, Szklo, Kalafonia;
 	public ButtonGroup group;
 	static final int SLIDER_MIN = 3;
 	static final int SLIDER_MAX = 30;
@@ -75,11 +77,16 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	static final int promien = 100;
 	int dlugosclini = 1;
 	Color kolorlinii = Color.black;
+	String ang="en";
+	String country="US";
+	Locale l1 = new Locale(ang,country);
+	ResourceBundle r1 = ResourceBundle.getBundle("projekt.english/language",l1);
 	
 	//do obrazkow 
 	BufferedImage image; 
 
 	public PhotoelectricEffect() throws HeadlessException{
+   
 		
 		super();
 		
@@ -90,31 +97,42 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		menubar = new JMenuBar();		
 	    menu = new JMenu("Menu");
 	    
-	    menuZapisz=new JMenuItem("Zapisz plik");
+	    menuZapisz=new JMenuItem(r1.getString("menuZapisz"));
 	    menuZapisz.setActionCommand("zapisz");
 		menuZapisz.addActionListener(this);
 		
 		
-		menuNowyplik =new JMenuItem("Nowy plik");
+		menuNowyplik =new JMenuItem(r1.getString("menuNowyplik"));
 		menuNowyplik.setActionCommand("nowyplik");
 		menuNowyplik.addActionListener(this);
 		
 		menu.add(menuZapisz);
 		menu.add(menuNowyplik);
 		
-		language=new JMenu("Jêzyk/Language");
+		language=new JMenu(r1.getString("language"));
 		
-		Polish=new JMenuItem("Polski/Polish");
+		Polish=new JMenuItem("PL");
+		Polish.setActionCommand("polish");
+		Polish.addActionListener(this);
 		
-		English=new JMenuItem("English/Angielski");
+		English=new JMenuItem("ENG");
+		English.setActionCommand("english");
+		English.addActionListener(this);
+		
+		Rus=new JMenuItem("RUS");
+		Rus.setActionCommand("rus");
+		Rus.addActionListener(this);
 		
 		windowpane = new JMenu("Info");
-		creators = new JMenuItem("Twórcy/Creators");
+		creators = new JMenuItem(r1.getString("creators"));
 		creators.setActionCommand("creators");
 		creators.addActionListener(this);
+		
 		windowpane.add(creators);
-		language.add(Polish);
+		
 		language.add(English);
+		language.add(Polish);
+		language.add(Rus);
 		
 		menubar.add(menu);
 		menubar.add(language);
@@ -123,8 +141,8 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		//Panel od przyciskow, lewy 
 		PRight = new JPanel();
 			
-		JLabel selectmaterial = new JLabel("Wybierz dielektryk:"); 
-		Ebonit = new JButton("Ebonit");
+		JLabel selectMaterial = new JLabel(r1.getString("selectMaterial")); 
+		Ebonit = new JButton(r1.getString("Ebonit"));
 		Ebonit.setActionCommand("Ebonit");
 		Ebonit.addActionListener(new ActionListener() 		 
   {
@@ -154,7 +172,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
   );
          
 		
-		Porcelana = new JButton("Porcelana");
+		Porcelana = new JButton(r1.getString("Porcelana"));
 		Porcelana.setActionCommand("Porcelana");
 		Porcelana.addActionListener(new ActionListener() 		 
       {
@@ -181,7 +199,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	            }	
       });
 		
-		Kalafonia = new JButton("Kalafonia");
+		Kalafonia = new JButton(r1.getString("Kalafonia"));
 		Kalafonia.setActionCommand("Kalafonia");
 		Kalafonia.addActionListener(new ActionListener() 		 
       {
@@ -208,7 +226,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	            }	
       });
 		
-		Szklo = new JButton("Szk³o");
+		Szklo = new JButton(r1.getString("Szklo"));
 		Szklo.setActionCommand("Szklo");
 		Szklo.addActionListener(new ActionListener() 		 
       {
@@ -235,7 +253,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	            }	
       });
 
-		changeColor = new JButton("Zmieñ Kolor T³a");
+		changeColor = new JButton(r1.getString("Tlo"));
 		changeColor.setActionCommand("changeColor");
 		changeColor.addActionListener(new ActionListener() 		 
       {
@@ -248,7 +266,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
           }
       });
 		
-		frequency  = new JButton("Wpisz czêstotliwoœæ");
+		frequency  = new JButton(r1.getString("frequency"));
 		frequency .setActionCommand("frequency ");
 		frequency .addActionListener(this); /*(new ActionListener()
       {
@@ -287,7 +305,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		PRight.add(frequency ,GridLayout(1,1));
 		PRight.add(changeColor, GridLayout(2,1));		
 		PRight.add(text1, GridLayout(3,1));
-		PRight.add(selectmaterial, GridLayout(4,1));
+		PRight.add(selectMaterial, GridLayout(4,1));
 		PRight.add(Ebonit, GridLayout(5,1));
 		PRight.add(Szklo, GridLayout(6,1));
 		PRight.add(Porcelana, GridLayout(7,1));
@@ -348,6 +366,57 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 			frame.setVisible(true);
 			//set default close operation
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		if (e.getActionCommand() == "polish")
+		{
+	    String pol="pl";
+		String kraj="PL";
+		Locale l2 = new Locale(pol,kraj);
+		ResourceBundle r2 = ResourceBundle.getBundle("projekt.polish/language_pl_PL",l2);
+		language.setText(r2.getString("language"));
+		frequency.setText(r2.getString("frequency"));
+		menuZapisz.setText(r2.getString("menuZapisz"));
+		menuNowyplik.setText(r2.getString("menuNowyplik"));
+		creators.setText(r2.getString("creators"));
+		Ebonit.setText(r2.getString("Ebonit"));
+		Porcelana.setText(r2.getString("Porcelana"));
+		Kalafonia.setText(r2.getString("Kalafonia"));
+		Szklo.setText(r2.getString("Szklo"));
+		changeColor.setText(r2.getString("Tlo"));
+		//selectMaterial.setText(r2.getString("selectMaterial"));
+		}
+		if (e.getActionCommand() == "english")
+		{
+	   
+		language.setText(r1.getString("language"));
+		frequency.setText(r1.getString("frequency"));
+		menuZapisz.setText(r1.getString("menuZapisz"));
+		menuNowyplik.setText(r1.getString("menuNowyplik"));
+		creators.setText(r1.getString("creators"));
+		Ebonit.setText(r1.getString("Ebonit"));
+		Porcelana.setText(r1.getString("Porcelana"));
+		Kalafonia.setText(r1.getString("Kalafonia"));
+		Szklo.setText(r1.getString("Szklo"));
+		changeColor.setText(r1.getString("Tlo"));
+		//selectMaterial.setText(r1.getString("selectMaterial"));
+		}
+		if (e.getActionCommand() == "rus")
+		{
+		String ru="ru";
+		String kraj="RUS";
+		Locale l3 = new Locale(ru,kraj);
+		ResourceBundle r3 = ResourceBundle.getBundle("projekt.russian/language_ru_RUS",l3);
+		language.setText(r3.getString("language"));
+		frequency.setText(r3.getString("frequency"));
+		menuZapisz.setText(r3.getString("menuZapisz"));
+		menuNowyplik.setText(r3.getString("menuNowyplik"));
+		creators.setText(r3.getString("creators"));
+		Ebonit.setText(r3.getString("Ebonit"));
+		Porcelana.setText(r3.getString("Porcelana"));
+		Kalafonia.setText(r3.getString("Kalafonia"));
+		Szklo.setText(r3.getString("Szklo"));
+		changeColor.setText(r3.getString("Tlo"));
+		//selectMaterial.setText(r3.getString("selectMaterial"));
 		}
 	}
 			
