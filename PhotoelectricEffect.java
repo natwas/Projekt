@@ -45,7 +45,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 //import java.util.Random;
 import java.util.ResourceBundle;
-import java.sql.*;
+//import java.sql.*;
 
 
 
@@ -61,7 +61,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 
 	JMenuBar menubar;
 	JMenu menu, language, windowpane;
-	JMenuItem menuZapisz, menuNowyplik, Polish, English, Rus, creators;
+	JMenuItem menuZapisz, menuNowyplik, Polish, English, Rus, creators, effect;
 	JPanel PUpper, PDown, PLeft, PRight, DrawPanel;
 	JSlider slider;
 	JTextField text1;
@@ -124,11 +124,17 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		Rus.addActionListener(this);
 		
 		windowpane = new JMenu("Info");
+		
 		creators = new JMenuItem(r1.getString("creators"));
 		creators.setActionCommand("creators");
 		creators.addActionListener(this);
 		
+		effect = new JMenuItem(r1.getString("effect"));
+		effect.setActionCommand("effect");
+		effect.addActionListener(this);
+		
 		windowpane.add(creators);
+		windowpane.add(effect);
 		
 		language.add(English);
 		language.add(Polish);
@@ -340,6 +346,10 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	
 	//Action Performer
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "start")
+		{
+		////////////////////////////////////////	
+		}
 		if (e.getActionCommand() == "zapisz") 
 		{
 			 BufferedImage image = new BufferedImage(DrawPanel.getWidth(), DrawPanel.getHeight(),BufferedImage.TYPE_INT_ARGB);
@@ -359,6 +369,27 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	                }
 	            }
 		}
+		if (e.getActionCommand() == "nowyplik")
+		{
+			 JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+	            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	                    "PNG images", "png");
+	            chooser.setFileFilter(filter);
+	            int returnVal = chooser.showOpenDialog(null);
+	            if(returnVal == JFileChooser.APPROVE_OPTION) {
+	                BufferedImage image = null;
+	                File inputFile = new File(chooser.getSelectedFile().getAbsolutePath());
+	                try {
+	                    image = ImageIO.read(inputFile);
+	                    Graphics g = DrawPanel.getGraphics();
+	                    g.drawImage(image, 0, 0, null);
+	                } catch(IOException ex) {
+	                    System.out.println(ex.getMessage());
+	                }
+
+	            }
+		}
+		
 		if (e.getActionCommand() == "creators")
 		{
 			//call the object of NewWindow and set visible true
@@ -383,6 +414,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		Kalafonia.setText(r2.getString("Kalafonia"));
 		Szklo.setText(r2.getString("Szklo"));
 		changeColor.setText(r2.getString("Tlo"));
+		effect.setText(r2.getString("effect"));
 		//selectMaterial.setText(r2.getString("selectMaterial"));
 		}
 		if (e.getActionCommand() == "english")
@@ -398,6 +430,7 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 		Kalafonia.setText(r1.getString("Kalafonia"));
 		Szklo.setText(r1.getString("Szklo"));
 		changeColor.setText(r1.getString("Tlo"));
+		effect.setText(r1.getString("effect"));
 		//selectMaterial.setText(r1.getString("selectMaterial"));
 		}
 		if (e.getActionCommand() == "rus")
@@ -442,5 +475,4 @@ public class PhotoelectricEffect extends JFrame implements ActionListener {
 	  });
 		
 }
-	
 }
