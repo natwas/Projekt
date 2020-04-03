@@ -1,23 +1,26 @@
 package projekt;
 
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
  
 
-public class Window2 extends JFrame implements ActionListener 
+public class Window3 extends JFrame implements ActionListener 
 {
 
 private static final long serialVersionUID = 1L;
@@ -31,6 +34,9 @@ ResourceBundle r1 = ResourceBundle.getBundle("projekt.english/language",l1);
 JPanel PUpper, PDown, PLeft, PRight, PRight2, DrawPanel;
 JLabel label;
 JButton PL, ENG, RUS, GE;
+
+JTextField text2; 
+
 	public static void main(String[] args) 
 	{
 		
@@ -40,19 +46,19 @@ JButton PL, ENG, RUS, GE;
 			{
 				try 
 				{
-					Window2 frame = new Window2();
+					Window3 frame = new Window3();
 					frame.setVisible(true);					
 				}
-				catch (Exception e) 
+				catch (Exception es) 
 				{
-					e.printStackTrace();
+					es.printStackTrace();
 				}
 			}
 		});
 	}
  
 	
-	public Window2() 
+	public Window3() 
 	{
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(900,600);
@@ -88,33 +94,41 @@ JButton PL, ENG, RUS, GE;
 		
 		this.add(PUpper, BorderLayout.PAGE_START);
 	    
-	    DrawPanel= new JPanel();
-	    label= new JLabel("ok");
-	    DrawPanel.add(label);
+	    DrawPanel= new JPanel();  
+	
 	    DrawPanel.setBackground(Color.white);
 	    this.add(DrawPanel, BorderLayout.CENTER);
+	    JButton elo = new JButton("wyswietl ten tekst jebany"); 
+	    DrawPanel.add(elo); 
+	    elo.addActionListener(new ActionListener() 		 
+	    {
+	    	@Override       	            	
+			public void actionPerformed(ActionEvent es)
+	    	{
+	    		text2 = new JTextField("Co to");  
+				File plik = new File("efekt.txt"); 
+				Scanner odczyt;
+				try
+				{
+					odczyt = new Scanner(plik);
+					while(odczyt.hasNextLine())
+					System.out.print(odczyt.nextLine());
+					//text2.setText(odczyt.nextLine()); 
+					//DrawPanel.add(text2); 
+					  		 
+				 }
+				catch (FileNotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+				}
+	    	}
+	    });
 	    
-	    
-	}
-	public void actionPerformed(ActionEvent e){
-		if (e.getActionCommand() == "english")
-		{
-			
-		}
-		if (e.getActionCommand() == "polish")
-		{
-			
-		}
-		if (e.getActionCommand() == "rus")
-		{
-			
-		}
-		if (e.getActionCommand() == "german")
-		{
-			
-		}
-	
-	}
-	
-	
 }
+
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}}
